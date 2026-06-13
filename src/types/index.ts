@@ -1,12 +1,13 @@
-export type Severity = 'pass' | 'minor' | 'major' | 'critical' | 'na';
+export type Severity = 'critical' | 'major' | 'minor' | 'pass';
 export type InspectionStatus = 'draft' | 'in_progress' | 'completed' | 'signed';
 
 export interface ChecklistItem {
   id: string;
   label: string;
+  status: 'pass' | 'fail' | 'na' | 'pending';
   severity: Severity;
   notes: string;
-  photoPlaceholder: boolean;
+  photoPlaceholder?: boolean;
 }
 
 export interface ChecklistSection {
@@ -15,39 +16,55 @@ export interface ChecklistSection {
   items: ChecklistItem[];
 }
 
-export interface Template {
-  id: string;
+export interface Signature {
   name: string;
-  category: string;
-  description: string;
-  sections: ChecklistSection[];
-  isSample?: boolean;
+  role: string;
+  date: string;
+  captured: boolean;
 }
 
 export interface Inspection {
   id: string;
   title: string;
+  type: string;
   templateId: string;
-  templateName: string;
   location: string;
-  clientName: string;
-  clientEmail: string;
-  inspectorName: string;
-  date: string;
+  inspector: string;
+  client: string;
   status: InspectionStatus;
+  date: string;
   sections: ChecklistSection[];
+  signatures: { inspector: Signature; client: Signature };
   overallNotes: string;
-  signature: string;
-  createdAt: number;
-  updatedAt: number;
+  tags: string[];
+  score: number;
   isSample?: boolean;
+}
+
+export interface TemplateItem {
+  label: string;
+  severity: Severity;
+  photoPlaceholder?: boolean;
+}
+
+export interface TemplateSection {
+  id: string;
+  title: string;
+  items: TemplateItem[];
+}
+
+export interface InspectionTemplate {
+  id: string;
+  name: string;
+  type: string;
+  description: string;
+  sections: TemplateSection[];
+  icon: string;
 }
 
 export interface AppSettings {
   companyName: string;
-  companyEmail: string;
-  companyPhone: string;
-  defaultInspector: string;
-  theme: 'light' | 'dark';
-  accentColor: string;
+  inspectorName: string;
+  theme: 'light' | 'dark' | 'system';
+  defaultType: string;
 }

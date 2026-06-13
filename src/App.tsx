@@ -1,137 +1,80 @@
-import { useState, useEffect, useCallback } from 'react';
-import AppShell from './components/AppShell';
-import Onboarding from './screens/Onboarding';
-import Dashboard from './screens/Dashboard';
-import InspectionsList from './screens/InspectionsList';
-import InspectionDetail from './screens/InspectionDetail';
-import Templates from './screens/Templates';
-import { Settings, Help, About } from './screens/SettingsHelp';
-import {
-  isOnboardingDone, getInspections, getTemplates, getSettings, saveSettings
-} from './utils/storage';
-import { Inspection, Template, AppSettings } from './types';
+import React, { useState, useEffect } from 'react';
+import { useStore } from './store/useStore';
+import { Sidebar } from './components/layout/Sidebar';
+import { TopBar } from './components/layout/TopBar';
+import { OnboardingPage } from './pages/OnboardingPage';
+import { DashboardPage } from './pages/DashboardPage';
+import { InspectionsPage } from './pages/InspectionsPage';
+import { NewInspectionPage } from './pages/NewInspectionPage';
+import { TemplatesPage } from './pages/TemplatesPage';
+import { SettingsPage } from './pages/SettingsPage';
+import { HelpPage } from './pages/HelpPage';
+import { AboutPage } from './pages/AboutPage';
 
-type Screen = 'dashboard' | 'inspections' | 'templates' | 'settings' | 'help' | 'about';
+type Page = 'dashboard' | 'inspections' | 'new' | 'templates' | 'settings' | 'help' | 'about';
+
+const pageTitles: Record<Page, string> = {
+  dashboard: 'Dashboard', inspections: 'Inspections', new: 'New Inspection',
+  templates: 'Templates', settings: 'Settings', help: 'Help', about: 'About',
+};
 
 export default function App() {
-  const [onboarded, setOnboarded] = useState(isOnboardingDone());
-  const [screen, setScreen] = useState<Screen>('dashboard');
-  const [openInspId, setOpenInspId] = useState<string|null>(null);
-  const [isNewInsp, setIsNewInsp] = useState(false);
-
-  const [inspections, setInspections] = useState<Inspection[]>([]);
-  const [templates, setTemplates] = useState<Template[]>([]);
-  const [settings, setSettings] = useState<AppSettings>(getSettings());
-
-  const refresh = useCallback(() => {
-    setInspections(getInspections());
-    setTemplates(getTemplates());
-  }, []);
-
-  useEffect(() => {
-    if (onboarded) refresh();
-  }, [onboarded, refresh]);
+  const store = useStore();
+  const [page, setPage] = useState<Page>('dashboard');
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [editId, setEditId] = useState<string | null>(null);
 
   // Apply theme
   useEffect(() => {
-    if (settings.theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
+    const theme = store.settings.theme;
+    const el = document.documentElement;
+    if (theme === 'dark') el.classList.add('dark');
+    else if (theme === 'light') el.classList.remove('dark');
+    else {
+      const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      sysDark ? el.classList.add('dark') : el.classList.remove('dark');
     }
-  }, [settings.theme]);
+  }, [store.settings.theme]);
 
-  function handleOnboardingDone() {
-    setOnboarded(true);
-    refresh();
-  }
+  const navigate = (p: Page) => setPage(p);
 
-  function handleOpenInspection(id: string) {
-    setOpenInspId(id);
-    setIsNewInsp(false);
-  }
+  const handleEdit = (id: string) => {
+    setEditId(id);
+    setPage('new');
+  };
 
-  function handleNewInspection() {
-    setOpenInspId(null);
-    setIsNewInsp(true);
-  }
+  const handleTheme = (t: 'light' | 'dark' | 'system') => {
+    store.updateSettings({ theme: t });
+  };
 
-  function handleBackFromInspection() {
-    setOpenInspId(null);
-    setIsNewInsp(false);
-    refresh();
-  }
+  if (!store.isOnboarded) return <OnboardingPage store={store} />;
 
-  function handleThemeToggle() {
-    const newTheme = settings.theme === 'dark' ? 'light' : 'dark';
-    const updated = { ...settings, theme: newTheme };
-    setSettings(updated as AppSettings);
-    saveSettings(updated as AppSettings);
-  }
-
-  function handleSettingsSaved(s: AppSettings) {
-    setSettings(s);
-    refresh();
-  }
-
-  if (!onboarded) {
-    return <Onboarding onDone={handleOnboardingDone}/>;
-  }
-
-  // ── Inspection detail view ─────────────────────────────
-  if (openInspId || isNewInsp) {
-    const insp = openInspId ? inspections.find(i => i.id === openInspId) || null : null;
-    return (
-      <div className={settings.theme === 'dark' ? 'dark' : ''}>
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
-          <InspectionDetail
-            inspection={insp}
-            templates={templates}
-            onBack={handleBackFromInspection}
-            onSaved={refresh}
-          />
-        </div>
-      </div>
-    );
-  }
-
-  // ── Main app ───────────────────────────────────────────
   return (
-    <AppShell
-      currentScreen={screen}
-      onNav={setScreen}
-      settings={settings}
-      onThemeToggle={handleThemeToggle}
-    >
-      {screen === 'dashboard' && (
-        <Dashboard
-          inspections={inspections}
-          onNew={handleNewInspection}
-          onOpen={handleOpenInspection}
+    <div className="flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-950">
+      <Sidebar
+        current={page}
+        onChange={p => { setPage(p); if (p !== 'new') setEditId(null); }}
+        companyName={store.settings.companyName}
+        collapsed={sidebarCollapsed}
+        onToggle={() => setSidebarCollapsed(c => !c)}
+      />
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <TopBar
+          title={pageTitles[page]}
+          settings={store.settings}
+          onTheme={handleTheme}
+          criticalIssues={store.stats.criticalIssues}
         />
-      )}
-      {screen === 'inspections' && (
-        <InspectionsList
-          inspections={inspections}
-          onNew={handleNewInspection}
-          onOpen={handleOpenInspection}
-          onRefresh={refresh}
-        />
-      )}
-      {screen === 'templates' && (
-        <Templates
-          templates={templates}
-          onRefresh={refresh}
-        />
-      )}
-      {screen === 'settings' && (
-        <Settings
-          settings={settings}
-          onSaved={handleSettingsSaved}
-        />
-      )}
-      {screen === 'help' && <Help/>}
-      {screen === 'about' && <About/>}
-    </AppShell>
+        <main className="flex-1 overflow-y-auto scrollbar-thin">
+          {page === 'dashboard'    && <DashboardPage store={store} onNavigate={navigate} />}
+          {page === 'inspections'  && <InspectionsPage store={store} onNavigate={navigate} onEdit={handleEdit} />}
+          {page === 'new'          && <NewInspectionPage store={store} editId={editId} onNavigate={navigate} />}
+          {page === 'templates'    && <TemplatesPage onNavigate={navigate} />}
+          {page === 'settings'     && <SettingsPage store={store} />}
+          {page === 'help'         && <HelpPage />}
+          {page === 'about'        && <AboutPage />}
+        </main>
+      </div>
+    </div>
   );
 }

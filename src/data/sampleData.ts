@@ -1,241 +1,159 @@
-import { Template, Inspection } from '../types';
-
-export const SAMPLE_TEMPLATES: Template[] = [
-  {
-    id: 'tpl-property',
-    name: 'Property Inspection',
-    category: 'Real Estate',
-    description: 'Full room-by-room property condition report for move-in/move-out.',
-    isSample: true,
-    sections: [
-      {
-        id: 's1', title: 'Exterior & Entry',
-        items: [
-          { id: 'i1', label: 'Front door condition', severity: 'pass', notes: '', photoPlaceholder: false },
-          { id: 'i2', label: 'Windows & frames', severity: 'minor', notes: 'Minor paint peeling on east window', photoPlaceholder: false },
-          { id: 'i3', label: 'Roof visible damage', severity: 'pass', notes: '', photoPlaceholder: false },
-          { id: 'i4', label: 'Gutters & drainage', severity: 'pass', notes: '', photoPlaceholder: false },
-        ]
-      },
-      {
-        id: 's2', title: 'Living Room',
-        items: [
-          { id: 'i5', label: 'Walls & ceiling', severity: 'pass', notes: '', photoPlaceholder: false },
-          { id: 'i6', label: 'Flooring condition', severity: 'minor', notes: 'Small scuff near entrance', photoPlaceholder: false },
-          { id: 'i7', label: 'Light fixtures', severity: 'pass', notes: '', photoPlaceholder: false },
-          { id: 'i8', label: 'Electrical outlets', severity: 'pass', notes: '', photoPlaceholder: false },
-        ]
-      },
-      {
-        id: 's3', title: 'Kitchen',
-        items: [
-          { id: 'i9', label: 'Appliances functional', severity: 'pass', notes: '', photoPlaceholder: false },
-          { id: 'i10', label: 'Sink & plumbing', severity: 'pass', notes: '', photoPlaceholder: false },
-          { id: 'i11', label: 'Cabinets & drawers', severity: 'pass', notes: '', photoPlaceholder: false },
-          { id: 'i12', label: 'Ventilation / hood', severity: 'major', notes: 'Hood fan not working — needs repair', photoPlaceholder: false },
-        ]
-      },
-      {
-        id: 's4', title: 'Bathroom',
-        items: [
-          { id: 'i13', label: 'Toilet flush & seal', severity: 'pass', notes: '', photoPlaceholder: false },
-          { id: 'i14', label: 'Shower / tub condition', severity: 'minor', notes: 'Minor grout discoloration', photoPlaceholder: false },
-          { id: 'i15', label: 'Water pressure', severity: 'pass', notes: '', photoPlaceholder: false },
-        ]
-      }
-    ]
-  },
-  {
-    id: 'tpl-equipment',
-    name: 'Equipment Inspection',
-    category: 'Industrial',
-    description: 'Mechanical and electrical equipment condition check with safety findings.',
-    isSample: true,
-    sections: [
-      {
-        id: 's1', title: 'General Condition',
-        items: [
-          { id: 'i1', label: 'Equipment label & serial number', severity: 'pass', notes: '', photoPlaceholder: false },
-          { id: 'i2', label: 'Physical damage / corrosion', severity: 'minor', notes: 'Surface rust on frame base', photoPlaceholder: false },
-          { id: 'i3', label: 'Safety guards in place', severity: 'pass', notes: '', photoPlaceholder: false },
-        ]
-      },
-      {
-        id: 's2', title: 'Mechanical',
-        items: [
-          { id: 'i4', label: 'Bearings / vibration', severity: 'pass', notes: '', photoPlaceholder: false },
-          { id: 'i5', label: 'Lubrication levels', severity: 'critical', notes: 'Oil level critically low — immediate top-up required', photoPlaceholder: false },
-          { id: 'i6', label: 'Belts & chains', severity: 'pass', notes: '', photoPlaceholder: false },
-        ]
-      },
-      {
-        id: 's3', title: 'Electrical',
-        items: [
-          { id: 'i7', label: 'Wiring condition', severity: 'pass', notes: '', photoPlaceholder: false },
-          { id: 'i8', label: 'Control panel / switches', severity: 'pass', notes: '', photoPlaceholder: false },
-          { id: 'i9', label: 'Grounding / earthing', severity: 'major', notes: 'Grounding cable needs replacement', photoPlaceholder: false },
-        ]
-      }
-    ]
-  },
-  {
-    id: 'tpl-cleaning',
-    name: 'Cleaning Inspection',
-    category: 'Cleaning Services',
-    description: 'Post-cleaning quality check for offices, Airbnb, and commercial sites.',
-    isSample: true,
-    sections: [
-      {
-        id: 's1', title: 'Common Areas',
-        items: [
-          { id: 'i1', label: 'Floors swept & mopped', severity: 'pass', notes: '', photoPlaceholder: false },
-          { id: 'i2', label: 'Surfaces dusted', severity: 'pass', notes: '', photoPlaceholder: false },
-          { id: 'i3', label: 'Trash emptied', severity: 'pass', notes: '', photoPlaceholder: false },
-          { id: 'i4', label: 'Glass / mirrors clean', severity: 'minor', notes: 'Streak marks on lobby mirror', photoPlaceholder: false },
-        ]
-      },
-      {
-        id: 's2', title: 'Restrooms',
-        items: [
-          { id: 'i5', label: 'Toilets cleaned & sanitized', severity: 'pass', notes: '', photoPlaceholder: false },
-          { id: 'i6', label: 'Soap / paper towel stocked', severity: 'major', notes: 'Paper towels empty in stall 2', photoPlaceholder: false },
-          { id: 'i7', label: 'Floors mopped', severity: 'pass', notes: '', photoPlaceholder: false },
-        ]
-      },
-      {
-        id: 's3', title: 'Kitchen / Break Room',
-        items: [
-          { id: 'i8', label: 'Counters wiped', severity: 'pass', notes: '', photoPlaceholder: false },
-          { id: 'i9', label: 'Sink cleaned', severity: 'pass', notes: '', photoPlaceholder: false },
-          { id: 'i10', label: 'Microwave inside cleaned', severity: 'minor', notes: 'Food residue inside microwave', photoPlaceholder: false },
-        ]
-      }
-    ]
-  },
-  {
-    id: 'tpl-safety',
-    name: 'Safety Audit',
-    category: 'Safety & Compliance',
-    description: 'Workplace safety audit with risk levels and corrective action tracking.',
-    isSample: true,
-    sections: [
-      {
-        id: 's1', title: 'Fire Safety',
-        items: [
-          { id: 'i1', label: 'Fire extinguishers accessible', severity: 'pass', notes: '', photoPlaceholder: false },
-          { id: 'i2', label: 'Emergency exits clear', severity: 'critical', notes: 'Storage boxes blocking Exit B', photoPlaceholder: false },
-          { id: 'i3', label: 'Smoke detectors tested', severity: 'major', notes: 'Unit 3B detector battery expired', photoPlaceholder: false },
-        ]
-      },
-      {
-        id: 's2', title: 'Workplace Hazards',
-        items: [
-          { id: 'i4', label: 'Floor surfaces dry & clean', severity: 'pass', notes: '', photoPlaceholder: false },
-          { id: 'i5', label: 'Cables / cords managed', severity: 'minor', notes: 'Cable trailing in aisle 2', photoPlaceholder: false },
-          { id: 'i6', label: 'PPE available & accessible', severity: 'pass', notes: '', photoPlaceholder: false },
-        ]
-      },
-      {
-        id: 's3', title: 'Chemical Storage',
-        items: [
-          { id: 'i7', label: 'Chemicals properly labelled', severity: 'pass', notes: '', photoPlaceholder: false },
-          { id: 'i8', label: 'MSDS sheets available', severity: 'major', notes: 'Missing MSDS for 3 chemicals', photoPlaceholder: false },
-          { id: 'i9', label: 'Storage area ventilated', severity: 'pass', notes: '', photoPlaceholder: false },
-        ]
-      }
-    ]
-  }
-];
+import { Inspection } from '../types';
 
 export const SAMPLE_INSPECTIONS: Inspection[] = [
   {
-    id: 'insp-001',
-    title: 'Apartment 4B — Move-In Report',
-    templateId: 'tpl-property',
-    templateName: 'Property Inspection',
-    location: '14 Elm Street, Apt 4B, Manchester',
-    clientName: 'Sarah Mitchell',
-    clientEmail: 'sarah.mitchell@email.com',
-    inspectorName: 'James Carter',
-    date: '2026-06-10',
+    id: 'sample-1',
+    title: 'Riverside Apartments – Unit 4B',
+    type: 'Property',
+    templateId: 'property',
+    location: '12 Riverside Drive, Unit 4B',
+    inspector: 'James Thornton',
+    client: 'Maria Santos',
     status: 'signed',
-    overallNotes: 'Property is in good overall condition. Hood fan requires immediate attention. Minor cosmetic issues noted.',
-    signature: 'Sarah Mitchell',
-    sections: SAMPLE_TEMPLATES[0].sections,
-    createdAt: Date.now() - 3 * 86400000,
-    updatedAt: Date.now() - 3 * 86400000,
+    date: new Date(Date.now() - 2 * 86400000).toISOString().split('T')[0],
+    overallNotes: 'Property in generally good condition. Bathroom mold requires immediate attention. Smoke detectors need battery replacement.',
+    tags: ['rental', 'move-in', 'urgent-item'],
+    score: 78,
     isSample: true,
+    signatures: {
+      inspector: { name: 'James Thornton', role: 'Inspector', date: new Date(Date.now() - 2 * 86400000).toISOString().split('T')[0], captured: true },
+      client:    { name: 'Maria Santos',   role: 'Tenant',    date: new Date(Date.now() - 2 * 86400000).toISOString().split('T')[0], captured: true },
+    },
+    sections: [
+      {
+        id: 'exterior', title: 'Exterior',
+        items: [
+          { id: 'e1', label: 'Roof & gutters condition',  status: 'pass', severity: 'major', notes: '' },
+          { id: 'e2', label: 'Walls / cladding',          status: 'pass', severity: 'major', notes: 'Minor paint peeling on north side' },
+          { id: 'e3', label: 'Windows & frames',          status: 'pass', severity: 'minor', notes: '' },
+          { id: 'e4', label: 'Entry doors & locks',       status: 'pass', severity: 'major', notes: '' },
+          { id: 'e5', label: 'Driveway / pathways',       status: 'pass', severity: 'minor', notes: '' },
+        ]
+      },
+      {
+        id: 'interior', title: 'Interior – Living Areas',
+        items: [
+          { id: 'i1', label: 'Walls & ceilings (cracks/stains)', status: 'pass', severity: 'major', notes: '' },
+          { id: 'i2', label: 'Floors & carpets',                 status: 'fail', severity: 'minor', notes: 'Carpet stain near window – pre-existing' },
+          { id: 'i3', label: 'Windows operational',              status: 'pass', severity: 'minor', notes: '' },
+          { id: 'i4', label: 'Electrical outlets functional',    status: 'pass', severity: 'major', notes: '' },
+          { id: 'i5', label: 'Smoke detectors present',         status: 'fail', severity: 'critical', notes: 'Battery low – replace immediately' },
+        ]
+      },
+      {
+        id: 'kitchen', title: 'Kitchen',
+        items: [
+          { id: 'k1', label: 'Sink & taps (leaks)',        status: 'pass', severity: 'major', notes: '' },
+          { id: 'k2', label: 'Appliances functional',      status: 'pass', severity: 'minor', notes: '' },
+          { id: 'k3', label: 'Cupboards & hinges',         status: 'pass', severity: 'minor', notes: '' },
+          { id: 'k4', label: 'Ventilation / extractor fan', status: 'pass', severity: 'minor', notes: '' },
+        ]
+      },
+      {
+        id: 'bathroom', title: 'Bathroom',
+        items: [
+          { id: 'b1', label: 'Toilet flush & seal',      status: 'pass', severity: 'major', notes: '' },
+          { id: 'b2', label: 'Shower / bath condition',  status: 'fail', severity: 'major', notes: 'Grout cracking around shower tray' },
+          { id: 'b3', label: 'Water pressure & drainage',status: 'pass', severity: 'major', notes: '' },
+          { id: 'b4', label: 'Mold / dampness',          status: 'fail', severity: 'critical', notes: 'Visible mold on ceiling – must be treated' },
+        ]
+      },
+    ]
   },
   {
-    id: 'insp-002',
-    title: 'Pump Station — Monthly Check',
-    templateId: 'tpl-equipment',
-    templateName: 'Equipment Inspection',
-    location: 'Warehouse Unit 7, Industrial Park',
-    clientName: 'Atlas Engineering Ltd',
-    clientEmail: 'ops@atlaseng.com',
-    inspectorName: 'Yusuf Osman',
-    date: '2026-06-08',
+    id: 'sample-2',
+    title: 'CNC Machine M-200 – Bay 3',
+    type: 'Equipment',
+    templateId: 'equipment',
+    location: 'Factory Floor, Bay 3',
+    inspector: 'James Thornton',
+    client: 'Precision Parts Ltd',
     status: 'completed',
-    overallNotes: 'Critical oil level issue flagged. Grounding cable replacement scheduled for next week.',
-    signature: '',
-    sections: SAMPLE_TEMPLATES[1].sections,
-    createdAt: Date.now() - 5 * 86400000,
-    updatedAt: Date.now() - 5 * 86400000,
+    date: new Date(Date.now() - 5 * 86400000).toISOString().split('T')[0],
+    overallNotes: 'Machine in good working order. Emergency stop tested and functional. Minor cable management needed.',
+    tags: ['factory', 'monthly-check'],
+    score: 92,
     isSample: true,
+    signatures: {
+      inspector: { name: 'James Thornton', role: 'Inspector',   date: '', captured: true },
+      client:    { name: 'Tom Walsh',       role: 'Site Manager', date: '', captured: false },
+    },
+    sections: [
+      {
+        id: 'general', title: 'General Condition',
+        items: [
+          { id: 'g1', label: 'Equipment ID / serial number verified', status: 'pass', severity: 'minor', notes: 'Serial: M200-2847-X' },
+          { id: 'g2', label: 'Visible damage or corrosion',          status: 'pass', severity: 'major', notes: '' },
+          { id: 'g3', label: 'Safety labels / warnings legible',     status: 'pass', severity: 'critical', notes: '' },
+          { id: 'g4', label: 'Cleanliness & housekeeping',           status: 'fail', severity: 'minor', notes: 'Oil residue on base – clean required' },
+        ]
+      },
+      {
+        id: 'safety', title: 'Safety Systems',
+        items: [
+          { id: 's1', label: 'Emergency stop functional', status: 'pass', severity: 'critical', notes: 'Tested 3x – all passed' },
+          { id: 's2', label: 'Guards & shields in place', status: 'pass', severity: 'critical', notes: '' },
+          { id: 's3', label: 'Electrical cables secure',  status: 'fail', severity: 'critical', notes: 'Cable tray loose at junction box – minor fix needed' },
+          { id: 's4', label: 'Fire extinguisher nearby',  status: 'pass', severity: 'major', notes: '' },
+        ]
+      },
+      {
+        id: 'operation', title: 'Operational Check',
+        items: [
+          { id: 'o1', label: 'Startup procedure correct',          status: 'pass', severity: 'major', notes: '' },
+          { id: 'o2', label: 'Noise / vibration within limits',    status: 'pass', severity: 'major', notes: '' },
+          { id: 'o3', label: 'Temperature within range',           status: 'pass', severity: 'major', notes: 'Operating at 68°C – within spec' },
+          { id: 'o4', label: 'Output quality acceptable',          status: 'pass', severity: 'minor', notes: '' },
+        ]
+      },
+    ]
   },
   {
-    id: 'insp-003',
-    title: 'Grand Plaza Office — Weekly Clean',
-    templateId: 'tpl-cleaning',
-    templateName: 'Cleaning Inspection',
-    location: 'Grand Plaza Office Tower, Floor 8',
-    clientName: 'Brightside Facilities',
-    clientEmail: 'quality@brightside.co',
-    inspectorName: 'Maria Santos',
-    date: '2026-06-12',
+    id: 'sample-3',
+    title: 'The Grand Hotel – Suite 12 Turnover',
+    type: 'Cleaning',
+    templateId: 'cleaning',
+    location: 'The Grand Hotel, Suite 12',
+    inspector: 'James Thornton',
+    client: 'The Grand Hotel Management',
     status: 'in_progress',
+    date: new Date().toISOString().split('T')[0],
     overallNotes: '',
-    signature: '',
-    sections: SAMPLE_TEMPLATES[2].sections,
-    createdAt: Date.now() - 86400000,
-    updatedAt: Date.now() - 3600000,
+    tags: ['hotel', 'turnover'],
+    score: 65,
     isSample: true,
+    signatures: {
+      inspector: { name: 'James Thornton', role: 'Supervisor', date: '', captured: false },
+      client:    { name: '',               role: 'Manager',    date: '', captured: false },
+    },
+    sections: [
+      {
+        id: 'floors', title: 'Floors & Surfaces',
+        items: [
+          { id: 'f1', label: 'Floors swept / vacuumed', status: 'pass', severity: 'major', notes: '' },
+          { id: 'f2', label: 'Floors mopped / polished', status: 'pending', severity: 'major', notes: '' },
+          { id: 'f3', label: 'Skirting boards dusted',   status: 'pending', severity: 'minor', notes: '' },
+          { id: 'f4', label: 'Stairs / hallways clean',  status: 'pass',    severity: 'minor', notes: '' },
+        ]
+      },
+      {
+        id: 'kitchen_c', title: 'Kitchen',
+        items: [
+          { id: 'kc1', label: 'Surfaces wiped & sanitised', status: 'pass', severity: 'major', notes: '' },
+          { id: 'kc2', label: 'Sink cleaned & descaled',    status: 'pass', severity: 'major', notes: '' },
+          { id: 'kc3', label: 'Bin emptied & relined',      status: 'pass', severity: 'major', notes: '' },
+          { id: 'kc4', label: 'Appliance fronts wiped',     status: 'fail', severity: 'minor', notes: 'Microwave interior needs attention' },
+        ]
+      },
+      {
+        id: 'bathrooms', title: 'Bathrooms',
+        items: [
+          { id: 'bt1', label: 'Toilet cleaned & disinfected', status: 'pass',    severity: 'critical', notes: '' },
+          { id: 'bt2', label: 'Sink & taps cleaned',          status: 'pass',    severity: 'major',    notes: '' },
+          { id: 'bt3', label: 'Mirrors polished',             status: 'pending', severity: 'minor',    notes: '' },
+          { id: 'bt4', label: 'Fresh towels / supplies stocked', status: 'pending', severity: 'minor', notes: '' },
+        ]
+      },
+    ]
   },
-  {
-    id: 'insp-004',
-    title: 'Warehouse B — Q2 Safety Audit',
-    templateId: 'tpl-safety',
-    templateName: 'Safety Audit',
-    location: 'Distribution Centre, Building B',
-    clientName: 'Vantage Logistics',
-    clientEmail: 'safety@vantagelogistics.com',
-    inspectorName: 'James Carter',
-    date: '2026-06-05',
-    status: 'completed',
-    overallNotes: 'Critical exit blockage resolved on-site. Follow-up required for detector and MSDS.',
-    signature: '',
-    sections: SAMPLE_TEMPLATES[3].sections,
-    createdAt: Date.now() - 8 * 86400000,
-    updatedAt: Date.now() - 8 * 86400000,
-    isSample: true,
-  },
-  {
-    id: 'insp-005',
-    title: 'Unit 12 — Move-Out Check',
-    templateId: 'tpl-property',
-    templateName: 'Property Inspection',
-    location: '88 Birch Avenue, Unit 12',
-    clientName: 'Tom Wheeler',
-    clientEmail: 'tom.w@gmail.com',
-    inspectorName: 'James Carter',
-    date: '2026-06-13',
-    status: 'draft',
-    overallNotes: '',
-    signature: '',
-    sections: SAMPLE_TEMPLATES[0].sections,
-    createdAt: Date.now() - 1800000,
-    updatedAt: Date.now() - 1800000,
-    isSample: true,
-  }
 ];
