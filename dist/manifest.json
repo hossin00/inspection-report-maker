@@ -1,0 +1,27 @@
+{
+  "name": "Inspection Report Maker",
+  "short_name": "Inspections",
+  "description": "Create professional inspection reports with checklists, severity ratings, client signatures, and PDF export.",
+  "start_url": "/inspection-report-maker/",
+  "scope": "/inspection-report-maker/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f8fafc",
+  "theme_color": "#2563eb",
+  "lang": "en-US",
+  "categories": ["productivity", "business"],
+  "icons": [
+    {"src": "/inspection-report-maker/icons/icon-44x44.png",   "sizes": "44x44",   "type": "image/png", "purpose": "any"},
+    {"src": "/inspection-report-maker/icons/icon-71x71.png",   "sizes": "71x71",   "type": "image/png", "purpose": "any"},
+    {"src": "/inspection-report-maker/icons/icon-150x150.png", "sizes": "150x150", "type": "image/png", "purpose": "any"},
+    {"src": "/inspection-report-maker/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "/inspection-report-maker/icons/icon-256x256.png", "sizes": "256x256", "type": "image/png", "purpose": "any"},
+    {"src": "/inspection-report-maker/icons/icon-310x310.png", "sizes": "310x310", "type": "image/png", "purpose": "any"},
+    {"src": "/inspection-report-maker/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "/inspection-report-maker/icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable"},
+    {"src": "/inspection-report-maker/icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ],
+  "screenshots": [],
+  "related_applications": [],
+  "prefer_related_applications": false
+}
